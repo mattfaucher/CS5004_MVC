@@ -36,6 +36,7 @@ public class EasyAnimator {
     TypeOfView type = TypeOfView.TEXT;
     int speed = 1;
     JOptionPane error = new JOptionPane();
+    // commment here TODO
 
     if (args.length == 0 || args.length < 4) {
       System.out.println("Incorrect arguments passed");
