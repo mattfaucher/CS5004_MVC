@@ -10,7 +10,7 @@ import cs5004.mvc.view.IView;
 import cs5004.mvc.view.TypeOfView;
 import cs5004.mvc.view.ViewFactory;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
@@ -135,7 +135,7 @@ public class EasyAnimator {
             tick++;
             view.pack();
             view.setResizable(true);
-            view.setMinimumSize(new Dimension(800,900));
+            view.setMinimumSize(new Dimension(800, 900));
             view.update(view.getGraphics());
             view.repaint();
           }

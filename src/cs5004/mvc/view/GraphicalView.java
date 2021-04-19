@@ -1,6 +1,5 @@
 package cs5004.mvc.view;
 
-import cs5004.mvc.model.Canvas;
 import cs5004.mvc.model.IModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
