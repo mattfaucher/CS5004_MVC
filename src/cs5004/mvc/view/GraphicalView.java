@@ -26,9 +26,10 @@ public class GraphicalView extends AbstractView implements IView {
     this.setTitle("Easy Animator");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLocationByPlatform(true);
-    super.setPreferredSize(new Dimension(model.getCanvas().getWidth(), model.getCanvas().getHeight()));
-    JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 0,100,-500,500);
-    JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL,0,100,-500,500);
+    super.setPreferredSize(
+        new Dimension(model.getCanvas().getWidth(), model.getCanvas().getHeight()));
+    JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 0, 100, -500, 500);
+    JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL, 0, 100, -500, 500);
     // add scroll bars
 
     // setting up the canvas
@@ -46,11 +47,12 @@ public class GraphicalView extends AbstractView implements IView {
         frame.setSize(e.getValue(), e.getValue());
       }
     }
+
     this.add(draw);
     hbar.addAdjustmentListener(new ScrollListener());
     vbar.addAdjustmentListener(new ScrollListener());
     this.getContentPane().add(hbar, BorderLayout.PAGE_END);
-    this.getContentPane().add(vbar,BorderLayout.LINE_END);
+    this.getContentPane().add(vbar, BorderLayout.LINE_END);
     this.getContentPane().add(this.draw, BorderLayout.CENTER);
     // pack everything that's been added
     this.pack();
@@ -84,5 +86,4 @@ public class GraphicalView extends AbstractView implements IView {
   public TypeOfView getViewType() {
     return TypeOfView.GRAPHICAL;
   }
-
 }
