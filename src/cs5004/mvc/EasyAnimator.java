@@ -9,6 +9,8 @@ import cs5004.mvc.view.GraphicalView;
 import cs5004.mvc.view.IView;
 import cs5004.mvc.view.TypeOfView;
 import cs5004.mvc.view.ViewFactory;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
@@ -36,7 +38,6 @@ public class EasyAnimator {
     TypeOfView type = TypeOfView.TEXT;
     int speed = 1;
     JOptionPane error = new JOptionPane();
-    // commment here TODO
 
     if (args.length == 0 || args.length < 4) {
       System.out.println("Incorrect arguments passed");
@@ -132,6 +133,11 @@ public class EasyAnimator {
           public void actionPerformed(ActionEvent e) {
             view.atTick(tick);
             tick++;
+            view.pack();
+            view.setResizable(true);
+            view.setMinimumSize(new Dimension(800,900));
+            view.update(view.getGraphics());
+            view.repaint();
           }
         };
     new Timer(delay, al).start();

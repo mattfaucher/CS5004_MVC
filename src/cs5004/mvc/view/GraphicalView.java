@@ -1,5 +1,6 @@
 package cs5004.mvc.view;
 
+import cs5004.mvc.model.Canvas;
 import cs5004.mvc.model.IModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -25,21 +26,19 @@ public class GraphicalView extends AbstractView implements IView {
     this.setTitle("Easy Animator");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLocationByPlatform(true);
-    super.setPreferredSize(new Dimension(super.getWidth(), super.getHeight()));
+    super.setPreferredSize(new Dimension(model.getCanvas().getWidth(), model.getCanvas().getHeight()));
+    JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 0,100,-500,500);
+    JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL,0,100,-500,500);
     // add scroll bars
-    JScrollBar horiz =
-        new JScrollBar(
-            JScrollBar.HORIZONTAL,
-            super.getWidth(),
-            super.getWidth(),
-            super.getWidth(),
-            super.getWidth() * 3);
 
     // setting up the canvas
     // Create the canvas and set it's values
-
     this.draw = new Draw(model);
+    this.add(draw);
     JFrame frame = this;
+    this.pack();
+    this.setVisible(true);
+    setResizable(true);
     class ScrollListener implements AdjustmentListener {
 
       @Override
@@ -47,15 +46,16 @@ public class GraphicalView extends AbstractView implements IView {
         frame.setSize(e.getValue(), e.getValue());
       }
     }
-
     this.add(draw);
-    horiz.addAdjustmentListener(new ScrollListener());
-    this.getContentPane().add(horiz, BorderLayout.SOUTH);
+    hbar.addAdjustmentListener(new ScrollListener());
+    vbar.addAdjustmentListener(new ScrollListener());
+    this.getContentPane().add(hbar, BorderLayout.PAGE_END);
+    this.getContentPane().add(vbar,BorderLayout.LINE_END);
+    this.getContentPane().add(this.draw, BorderLayout.CENTER);
     // pack everything that's been added
     this.pack();
-    draw.setVisible(true);
     this.setVisible(true);
-    super.setVisible(true);
+    setResizable(true);
   } // end constructor
 
   /**
@@ -67,7 +67,7 @@ public class GraphicalView extends AbstractView implements IView {
     draw.removeAll();
     draw.setTick(tick);
     draw.revalidate();
-    draw.repaint();
+    this.repaint();
   }
 
   @Override
@@ -84,4 +84,5 @@ public class GraphicalView extends AbstractView implements IView {
   public TypeOfView getViewType() {
     return TypeOfView.GRAPHICAL;
   }
+
 }
