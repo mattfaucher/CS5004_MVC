@@ -101,20 +101,46 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     setVisible(true);
   }
 
+  /**
+   * Method for the play button which will toggle play or pause based on current state.
+   *
+   * @param e ActionEvent.
+   */
   private void playButton(ActionEvent e) {
-    if (timer.isRunning()) {
-      timer.stop();
-    } else {
+    if (paused) {
       timer.start();
+      paused = false;
+    } else {
+      paused = true;
+      timer.stop();
     }
   }
 
+  /**
+   * Method for the restart button which will cause the animation to restart.
+   *
+   * @param e ActionEvent.
+   */
   private void restartButton(ActionEvent e) {
     timer.stop();
     this.tick = 0;
-    update(getGraphics());
-    repaint();
-    timer.restart();
+    atTick(this.tick);
+    timer.start();
+  }
+
+  /**
+   * Method to handle loop button action.
+   *
+   * @param e ActionEvent.
+   */
+  private void loopButton(ActionEvent e) {
+    if (loop) {
+      if (!timer.isRunning()) {
+        this.tick = 0;
+        atTick(0);
+        timer.restart();
+      }
+    }
   }
 
   @Override
@@ -149,12 +175,20 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    switch(e.getActionCommand()) {
+    switch (e.getActionCommand()) {
       case "play/pause":
         playButton(e);
         break;
       case "restart":
         restartButton(e);
+        break;
+      case "loop":
+        if (loop) {
+          loop = false;
+        } else {
+          loop = true;
+        }
+        loopButton(e);
         break;
       default:
         break;
@@ -165,8 +199,8 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   public void atTick(int tick) {
     drawPanel.removeAll();
     drawPanel.setTick(tick);
+    drawPanel.paintComponent(getGraphics());
     drawPanel.revalidate();
-    repaint();
   }
 
   @Override
