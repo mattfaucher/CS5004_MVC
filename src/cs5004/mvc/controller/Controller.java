@@ -74,7 +74,6 @@ public class Controller {
             view.setResizable(true);
             view.setMinimumSize(new Dimension(800, 900));
             view.update(view.getGraphics());
-            view.repaint();
           }
         };
     new Timer(delay, al).start();
