@@ -4,58 +4,27 @@ import cs5004.mvc.model.IModel;
 import cs5004.mvc.model.shape.IShape;
 import cs5004.mvc.model.shape.TypeOfShape;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/** Implements the functionality of the IDraw interface. */
-public class Draw extends JPanel {
-  private int tick;
+public class PlayBackPanel extends JPanel {
   private IModel model;
+  private int tick;
+  private JButton play;
 
-  /**
-   * Constructs a new Draw object which allows us to draw shapes.
-   *
-   * @param model IModel object populated with data.
-   */
-  public Draw(IModel model) {
+  public PlayBackPanel(IModel model) {
     super();
-
     if (model == null) {
-      throw new IllegalArgumentException("Model cannot be null");
-    }
-
-    if (model.getCanvas().getWidth() < 0 || model.getCanvas().getHeight() < 0) {
-      throw new IllegalArgumentException("Invalid width and height");
+      throw new IllegalArgumentException("Model is null");
     }
     this.model = model;
     this.tick = 0;
-    this.setBackground(Color.WHITE);
-    setSize(model.getCanvas().getWidth(), model.getCanvas().getHeight());
     this.setVisible(true);
-  }
+    play = new JButton("Play/Pause");
 
-  /**
-   * Method to set the tick.
-   *
-   * @param tick int.
-   */
-  public void setTick(int tick) {
-    if (tick < 0) {
-      throw new IllegalArgumentException("Tick must equal 1 or greater");
-    }
-    this.tick = tick;
-  }
-
-  /**
-   * Method to get the current tick.
-   *
-   * @return int tick.
-   */
-  public int getTick() {
-    return this.tick;
   }
 
   @Override
@@ -100,5 +69,26 @@ public class Draw extends JPanel {
         }
       }
     }
+  }
+
+  /**
+   * Method to set the tick.
+   *
+   * @param tick int.
+   */
+  public void setTick(int tick) {
+    if (tick < 0) {
+      throw new IllegalArgumentException("Tick must equal 1 or greater");
+    }
+    this.tick = tick;
+  }
+
+  /**
+   * Method to get the current tick.
+   *
+   * @return int tick.
+   */
+  public int getTick() {
+    return this.tick;
   }
 }

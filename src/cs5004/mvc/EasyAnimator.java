@@ -45,11 +45,12 @@ public class EasyAnimator {
       if (s.equals("-in")) {
         // out file is the next arg
         infile = args[Arrays.asList(args).indexOf(s) + 1];
-        if (infile.equals("") || infile == null) {
+        if (infile.equals("")) {
           System.out.println("Error finding file to read, must enter valid file path");
           System.exit(0);
         }
       }
+
       if (s.equals("-view")) {
         // parse the view type
         String viewType = args[Arrays.asList(args).indexOf(s) + 1];

@@ -21,6 +21,8 @@ public class ViewFactory {
         return new GraphicalView(tempo, model);
       case SVG:
         return new SVGView(tempo, model);
+      case PLAYBACK:
+        return new PlaybackView(tempo, model);
       default:
         throw new IllegalArgumentException("View is unsupported");
     }
