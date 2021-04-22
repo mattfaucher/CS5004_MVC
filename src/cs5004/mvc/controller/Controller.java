@@ -79,6 +79,7 @@ public class Controller {
         };
     new Timer(delay, al).start();
   }
+
   /**
    * Method to draw the actual image onto the canvas.
    *

@@ -12,7 +12,7 @@ import javax.swing.JScrollBar;
 /** Class for GraphicalView that builds a java swing window and draws the animations. */
 public class GraphicalView extends AbstractView implements IView {
   // class attributes
-  private Draw draw;
+  private DrawPanel drawPanel;
 
   /**
    * Constructs a new AbstractView Object.
@@ -33,8 +33,8 @@ public class GraphicalView extends AbstractView implements IView {
 
     // setting up the canvas
     // Create the canvas and set it's values
-    this.draw = new Draw(model);
-    this.add(draw);
+    this.drawPanel = new DrawPanel(model);
+    this.add(drawPanel);
     JFrame frame = this;
     this.pack();
     this.setVisible(true);
@@ -47,12 +47,12 @@ public class GraphicalView extends AbstractView implements IView {
       }
     }
 
-    this.add(draw);
+    this.add(drawPanel);
     hbar.addAdjustmentListener(new ScrollListener());
     vbar.addAdjustmentListener(new ScrollListener());
     this.getContentPane().add(hbar, BorderLayout.PAGE_END);
     this.getContentPane().add(vbar, BorderLayout.LINE_END);
-    this.getContentPane().add(this.draw, BorderLayout.CENTER);
+    this.getContentPane().add(this.drawPanel, BorderLayout.CENTER);
     // pack everything that's been added
     this.pack();
     this.setVisible(true);
@@ -65,9 +65,9 @@ public class GraphicalView extends AbstractView implements IView {
    * @param tick int tick.
    */
   public void atTick(int tick) {
-    draw.removeAll();
-    draw.setTick(tick);
-    draw.revalidate();
+    drawPanel.removeAll();
+    drawPanel.setTick(tick);
+    drawPanel.revalidate();
     this.repaint();
   }
 

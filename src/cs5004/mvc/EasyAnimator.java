@@ -9,11 +9,9 @@ import cs5004.mvc.util.AnimationReader;
 import cs5004.mvc.view.IView;
 import cs5004.mvc.view.TypeOfView;
 import cs5004.mvc.view.ViewFactory;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import javax.swing.JOptionPane;
 
 /**
  * Main method for the EasyAnimator, allows command line arguments to dictate the running of the
@@ -94,11 +92,5 @@ public class EasyAnimator {
     // set up the controller
     controller = new Controller(model, view);
     controller.startAnimation(infile, type, outfile, speed);
-
-    // TODO: Potential bugs...
-    /*
-    - buildings.txt doesn't work????
-    - Writing to svg file working but kind of not working for some of the text inputs
-     */
   }
 }
