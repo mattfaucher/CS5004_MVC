@@ -26,7 +26,7 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   private boolean paused;
   private boolean loop;
   private Timer timer;
-  private int tick = 0;
+  int tick = 0;
 
   /**
    * Constructs a new AbstractView Object.
@@ -103,12 +103,18 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
 
   private void playButton(ActionEvent e) {
     if (timer.isRunning()) {
-      System.out.println("Running");
       timer.stop();
     } else {
-      System.out.println("Stopped");
       timer.start();
     }
+  }
+
+  private void restartButton(ActionEvent e) {
+    timer.stop();
+    this.tick = 0;
+    update(getGraphics());
+    repaint();
+    timer.restart();
   }
 
   @Override
@@ -117,25 +123,21 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     int delay = 1000 / speed;
     ActionListener al =
         new ActionListener() {
-          private int tick = 0;
 
           @Override
           public void actionPerformed(ActionEvent e) {
-            if (e.getSource().equals(play)) {
-              playButton(e);
+            if (timer.isRunning()) {
+              System.out.println(tick);
+              atTick(tick);
+              tick++;
+              setPreferredSize(new Dimension(1920, 1000));
+              pack();
+              update(getGraphics());
             }
-            atTick(tick);
-            tick++;
-            pack();
-            setResizable(true);
-            setMinimumSize(new Dimension(800, 900));
-            update(getGraphics());
-            repaint();
           }
         };
-    new Timer(delay, al).start();
-
-
+    this.timer = new Timer(delay, al);
+    timer.start();
   }
 
   @Override
@@ -146,7 +148,19 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   }
 
   @Override
-  public void actionPerformed(ActionEvent e) {}
+  public void actionPerformed(ActionEvent e) {
+    switch(e.getActionCommand()) {
+      case "play/pause":
+        playButton(e);
+        break;
+      case "restart":
+        restartButton(e);
+        break;
+      default:
+        break;
+    }
+    repaint();
+  }
 
   public void atTick(int tick) {
     drawPanel.removeAll();
