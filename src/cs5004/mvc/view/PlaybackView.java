@@ -101,18 +101,41 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     setVisible(true);
   }
 
+  private void playButton(ActionEvent e) {
+    if (timer.isRunning()) {
+      System.out.println("Running");
+      timer.stop();
+    } else {
+      System.out.println("Stopped");
+      timer.start();
+    }
+  }
+
   @Override
   public void render(int speed) {
-    repaint();
     setVisible(true);
-    timer = new Timer(1000 / speed, this);
-    atTick(tick);
-    tick++;
-    pack();
-    setResizable(true);
-    setMinimumSize(new Dimension(800, 900));
-    update(getGraphics());
-    repaint();
+    int delay = 1000 / speed;
+    ActionListener al =
+        new ActionListener() {
+          private int tick = 0;
+
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            if (e.getSource().equals(play)) {
+              playButton(e);
+            }
+            atTick(tick);
+            tick++;
+            pack();
+            setResizable(true);
+            setMinimumSize(new Dimension(800, 900));
+            update(getGraphics());
+            repaint();
+          }
+        };
+    new Timer(delay, al).start();
+
+
   }
 
   @Override
@@ -122,43 +145,8 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     this.setLoop.addActionListener(click);
   }
 
-  private void playButton(ActionEvent e) {
-    tick += 1000 / getTempo();
-    if (paused) {
-     timer.stop();
-    } else {
-      timer.start();
-    }
-  }
-
-  private void restartButton(ActionEvent e) {
-    tick = 0;
-    timer.restart();
-  }
-
-  private void loopButton(ActionEvent e) {}
-
   @Override
-  public void actionPerformed(ActionEvent e) {
-    System.out.println(e.getActionCommand());
-
-    Object source = e.getSource();
-    if (play.equals(source)) {
-      playButton(e);
-    } else if (restart.equals(source)) {
-      restartButton(e);
-    } else if (setLoop.equals(source)) {
-      loopButton(e);
-    } else {
-      atTick(tick);
-      pack();
-      setResizable(true);
-      setMinimumSize(new Dimension(800, 900));
-      update(getGraphics());
-      repaint();
-    }
-    new Timer(1000 / getTempo(), this).start();
-  }
+  public void actionPerformed(ActionEvent e) {}
 
   public void atTick(int tick) {
     drawPanel.removeAll();

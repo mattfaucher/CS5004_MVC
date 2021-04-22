@@ -1,7 +1,6 @@
 package cs5004.mvc.controller;
 
 import cs5004.mvc.model.IModel;
-import cs5004.mvc.view.GraphicalView;
 import cs5004.mvc.view.IView;
 import cs5004.mvc.view.PlaybackView;
 import cs5004.mvc.view.TypeOfView;
@@ -52,7 +51,7 @@ public class Controller implements ActionListener {
         view.render(speed);
         break;
       case PLAYBACK:
-        //render((PlaybackView) view, speed);
+        // render((PlaybackView) view, speed);
         view.render(speed);
         break;
       default:
@@ -62,33 +61,6 @@ public class Controller implements ActionListener {
     }
   }
 
-  /**
-   * Method to draw the actual image onto the canvas.
-   *
-   * @param tempo int tempo.
-   */
-  public void render(PlaybackView view, int tempo) {
-    view.setVisible(true);
-    int delay = 1000 / tempo;
-    ActionListener al =
-        new ActionListener() {
-          private int tick = 0;
-
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            view.atTick(tick);
-            tick++;
-            view.pack();
-            view.setResizable(true);
-            view.setMinimumSize(new Dimension(800, 900));
-            view.update(view.getGraphics());
-            view.repaint();
-          }
-        };
-    new Timer(delay, al).start();
-  }
-
   @Override
-  public void actionPerformed(ActionEvent e) {
-  }
+  public void actionPerformed(ActionEvent e) {}
 }
