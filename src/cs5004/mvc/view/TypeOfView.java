@@ -4,5 +4,6 @@ package cs5004.mvc.view;
 public enum TypeOfView {
   TEXT,
   GRAPHICAL,
-  SVG
+  SVG,
+  PLAYBACK
 }

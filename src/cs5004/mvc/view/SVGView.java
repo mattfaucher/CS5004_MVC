@@ -300,7 +300,8 @@ public class SVGView extends AbstractView implements IView {
    * @throws IllegalArgumentException if string name is null.
    * @throws IOException if there's a file error.
    */
-  public void saveSVG(String svg, String filename) throws IllegalArgumentException, IOException {
+  @Override
+  public void saveFile(String svg, String filename) throws IllegalArgumentException, IOException {
     if (filename == null || filename.equals("")) {
       throw new IllegalArgumentException("Filename is invalid");
     }

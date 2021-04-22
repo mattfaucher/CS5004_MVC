@@ -73,6 +73,9 @@ public class EasyAnimator {
         if (viewType.equalsIgnoreCase("svg")) {
           type = TypeOfView.SVG;
         }
+        if (viewType.equalsIgnoreCase("playback")) {
+          type = TypeOfView.PLAYBACK;
+        }
       }
       if (s.equals("-out")) {
         // parse the outfile arg
@@ -97,7 +100,7 @@ public class EasyAnimator {
         System.out.println(view.getModelString(model));
         break;
       case SVG:
-        view.saveSVG(view.getModelString(model), outfile);
+        view.saveFile(view.getModelString(model), outfile);
         break;
       case GRAPHICAL:
         drawAnimation((GraphicalView) view, speed);

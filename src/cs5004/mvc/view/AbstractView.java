@@ -81,7 +81,7 @@ public abstract class AbstractView extends JFrame implements IView {
   public abstract String getModelString(IModel model);
 
   @Override
-  public abstract void saveSVG(String svg, String filename) throws IOException;
+  public abstract void saveFile(String file, String filename) throws IOException;
 
   @Override
   public abstract TypeOfView getViewType();

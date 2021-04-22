@@ -305,7 +305,7 @@ public class SVGViewTest {
     model.changeShapeColor("Green", endColor, time);
     model.changeShapeColor("Blue", endColor, time);
 
-    defaultSVG.saveSVG(defaultSVG.getModelString(model), "test");
+    defaultSVG.saveFile(defaultSVG.getModelString(model), "test");
     assertEquals("(0,255,0)", color2.toString());
   }
 
@@ -343,7 +343,7 @@ public class SVGViewTest {
     model.changeShapeColor("Green", endColor, time);
     model.changeShapeColor("Blue", endColor, time);
 
-    defaultSVG.saveSVG(defaultSVG.getModelString(model), null);
+    defaultSVG.saveFile(defaultSVG.getModelString(model), null);
   }
 
   @Test(expected = NoSuchElementException.class)
@@ -380,7 +380,7 @@ public class SVGViewTest {
     model.changeShapeColor("Green", endColor, time);
     model.changeShapeColor("Blue", endColor, time);
 
-    defaultSVG.saveSVG(defaultSVG.getModelString(model), "test");
+    defaultSVG.saveFile(defaultSVG.getModelString(model), "test");
     assertNotNull(model);
   }
 }

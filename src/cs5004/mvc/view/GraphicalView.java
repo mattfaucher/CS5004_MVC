@@ -77,8 +77,8 @@ public class GraphicalView extends AbstractView implements IView {
   }
 
   @Override
-  public void saveSVG(String svg, String filename) throws IOException {
-    // implementation doesn't exist here.
+  public void saveFile(String file, String filename) throws IOException {
+    // no implementation exists here
   }
 
   @Override

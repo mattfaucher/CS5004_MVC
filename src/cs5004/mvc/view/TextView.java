@@ -3,6 +3,8 @@ package cs5004.mvc.view;
 import cs5004.mvc.model.IModel;
 import cs5004.mvc.model.shape.TypeOfShape;
 import cs5004.mvc.model.transformations.ITransformations;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /** The type Textual view. */
@@ -108,8 +110,18 @@ public class TextView extends AbstractView implements IView {
   }
 
   @Override
-  public void saveSVG(String svg, String filename) throws IOException {
-    // method has no implementation here
+  public void saveFile(String text, String filename) throws IllegalArgumentException, IOException {
+    if (filename == null || filename.equals("")) {
+      throw new IllegalArgumentException("Filename is invalid");
+    }
+    String path = System.getProperty("user.home") + "/Desktop/" + filename + ".txt";
+    try {
+      BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+      writer.write(text);
+      writer.close();
+    } catch (IOException e) {
+      throw new IOException("Error writing to file");
+    }
   }
 
   @Override

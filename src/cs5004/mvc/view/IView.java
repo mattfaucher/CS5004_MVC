@@ -15,13 +15,13 @@ public interface IView {
   String getModelString(IModel model);
 
   /**
-   * Method to save the view as an svg file.
+   * Method to save the view as a file.
    *
-   * @param svg String with content.
+   * @param fileString String with content.
    * @param filename STring for filename.
    * @throws IOException if file not found.
    */
-  void saveSVG(String svg, String filename) throws IOException;
+  void saveFile(String fileString, String filename) throws IOException;
 
   /**
    * Method to get the type of the current view.
