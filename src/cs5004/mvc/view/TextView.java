@@ -3,6 +3,7 @@ package cs5004.mvc.view;
 import cs5004.mvc.model.IModel;
 import cs5004.mvc.model.shape.TypeOfShape;
 import cs5004.mvc.model.transformations.ITransformations;
+import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -127,5 +128,15 @@ public class TextView extends AbstractView implements IView {
   @Override
   public TypeOfView getViewType() {
     return TypeOfView.TEXT;
+  }
+
+  @Override
+  public void render(int speed) {
+
+  }
+
+  @Override
+  public void setListeners(ActionListener click) {
+
   }
 }

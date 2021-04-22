@@ -13,17 +13,20 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.Timer;
 
 public class PlaybackView extends AbstractView implements IView, ActionListener {
   private JPanel mainPanel;
   private JPanel controlPanel;
   private JPanel dataPanel;
   private DrawPanel drawPanel;
-  private JTextArea dataOutput;
   private JButton play;
   private JButton restart;
   private JCheckBox setLoop;
+  private boolean paused;
+  private boolean loop;
+  private Timer timer;
+  private int tick = 0;
 
   /**
    * Constructs a new AbstractView Object.
@@ -37,6 +40,8 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     setTitle("Easy Animator Playback");
     setPreferredSize(new Dimension(1600, 800));
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.paused = false;
+    this.loop = false;
 
     // set up main panel to house all other panels
     mainPanel = new JPanel();
@@ -73,16 +78,15 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     play = new JButton();
     play.setText("Play/Pause");
     play.setActionCommand("play/pause");
-    play.addActionListener(this);
     restart = new JButton();
     restart.setText("Restart");
     restart.setActionCommand("restart");
-    restart.addActionListener(this);
     setLoop = new JCheckBox();
     setLoop.setText("Loop");
     setLoop.setSelected(false);
     setLoop.setActionCommand("loop");
-    setLoop.addActionListener(this);
+    // set listeners
+    this.setListeners(this);
 
     controlPanel.add(play);
     controlPanel.add(restart);
@@ -97,16 +101,70 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     setVisible(true);
   }
 
-  /**
-   * Method to refresh the state of the canvas at a given tick.
-   *
-   * @param tick int tick.
-   */
+  @Override
+  public void render(int speed) {
+    repaint();
+    setVisible(true);
+    timer = new Timer(1000 / speed, this);
+    atTick(tick);
+    tick++;
+    pack();
+    setResizable(true);
+    setMinimumSize(new Dimension(800, 900));
+    update(getGraphics());
+    repaint();
+  }
+
+  @Override
+  public void setListeners(ActionListener click) {
+    this.play.addActionListener(click);
+    this.restart.addActionListener(click);
+    this.setLoop.addActionListener(click);
+  }
+
+  private void playButton(ActionEvent e) {
+    tick += 1000 / getTempo();
+    if (paused) {
+     timer.stop();
+    } else {
+      timer.start();
+    }
+  }
+
+  private void restartButton(ActionEvent e) {
+    tick = 0;
+    timer.restart();
+  }
+
+  private void loopButton(ActionEvent e) {}
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    System.out.println(e.getActionCommand());
+
+    Object source = e.getSource();
+    if (play.equals(source)) {
+      playButton(e);
+    } else if (restart.equals(source)) {
+      restartButton(e);
+    } else if (setLoop.equals(source)) {
+      loopButton(e);
+    } else {
+      atTick(tick);
+      pack();
+      setResizable(true);
+      setMinimumSize(new Dimension(800, 900));
+      update(getGraphics());
+      repaint();
+    }
+    new Timer(1000 / getTempo(), this).start();
+  }
+
   public void atTick(int tick) {
     drawPanel.removeAll();
     drawPanel.setTick(tick);
     drawPanel.revalidate();
-    this.repaint();
+    repaint();
   }
 
   @Override
@@ -122,22 +180,5 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   @Override
   public TypeOfView getViewType() {
     return TypeOfView.PLAYBACK;
-  }
-
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    switch (e.getActionCommand()) {
-      case "play/pause":
-        System.out.println("play/pause");
-        break;
-      case "restart":
-        System.out.println("restart");
-        break;
-      case "loop":
-        System.out.println("loop");
-        break;
-      default:
-        break;
-    }
   }
 }

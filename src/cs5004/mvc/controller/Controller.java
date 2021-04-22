@@ -15,9 +15,10 @@ import javax.swing.Timer;
  * Class to store the controller and to use this controller to handle the communication between
  * model and the view.
  */
-public class Controller {
+public class Controller implements ActionListener {
   private IModel model;
   private IView view;
+  private Timer timer;
 
   public Controller(IModel model, IView view) {
     if (model == null || view == null) {
@@ -26,6 +27,7 @@ public class Controller {
 
     this.model = model;
     this.view = view;
+    view.setListeners(this);
   }
 
   /**
@@ -47,10 +49,11 @@ public class Controller {
         view.saveFile(view.getModelString(model), outfile);
         break;
       case GRAPHICAL:
-        drawAnimation((GraphicalView) view, speed);
+        view.render(speed);
         break;
       case PLAYBACK:
-        drawAnimation((PlaybackView) view, speed);
+        //render((PlaybackView) view, speed);
+        view.render(speed);
         break;
       default:
         System.out.println("Error determining the type of view.");
@@ -59,32 +62,12 @@ public class Controller {
     }
   }
 
-  public void drawAnimation(PlaybackView view, int tempo) {
-    view.setVisible(true);
-    int delay = 1000 / tempo;
-    ActionListener al =
-        new ActionListener() {
-          private int tick = 0;
-
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            view.atTick(tick);
-            tick++;
-            view.pack();
-            view.setResizable(true);
-            view.setMinimumSize(new Dimension(800, 900));
-            view.update(view.getGraphics());
-          }
-        };
-    new Timer(delay, al).start();
-  }
-
   /**
    * Method to draw the actual image onto the canvas.
    *
    * @param tempo int tempo.
    */
-  public void drawAnimation(GraphicalView view, int tempo) {
+  public void render(PlaybackView view, int tempo) {
     view.setVisible(true);
     int delay = 1000 / tempo;
     ActionListener al =
@@ -103,5 +86,9 @@ public class Controller {
           }
         };
     new Timer(delay, al).start();
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
   }
 }

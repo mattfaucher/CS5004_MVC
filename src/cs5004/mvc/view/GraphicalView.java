@@ -3,11 +3,14 @@ package cs5004.mvc.view;
 import cs5004.mvc.model.IModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JScrollBar;
+import javax.swing.Timer;
 
 /** Class for GraphicalView that builds a java swing window and draws the animations. */
 public class GraphicalView extends AbstractView implements IView {
@@ -84,5 +87,38 @@ public class GraphicalView extends AbstractView implements IView {
   @Override
   public TypeOfView getViewType() {
     return TypeOfView.GRAPHICAL;
+  }
+
+  @Override
+  public void setListeners(ActionListener click) {
+
+  }
+
+  @Override
+  public void render(int speed) {
+    int delay = 1000 / speed;
+    ActionListener al =
+        new ActionListener() {
+          private int tick = 0;
+
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            this.atTick(tick);
+            tick++;
+            pack();
+            setResizable(true);
+            setMinimumSize(new Dimension(800, 900));
+            update(getGraphics());
+            repaint();
+          }
+
+          private void atTick(int tick) {
+            drawPanel.removeAll();
+            drawPanel.setTick(tick);
+            drawPanel.revalidate();
+            repaint();
+          }
+        };
+    new Timer(delay, al).start();
   }
 }

@@ -1,6 +1,7 @@
 package cs5004.mvc.view;
 
 import cs5004.mvc.model.IModel;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /** This is a interface for view. it contains textual view and . */
@@ -29,4 +30,8 @@ public interface IView {
    * @return TypeOfView.
    */
   TypeOfView getViewType();
+
+  void render(int speed);
+
+  void setListeners(ActionListener click);
 }

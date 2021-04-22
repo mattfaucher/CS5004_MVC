@@ -8,6 +8,7 @@ import cs5004.mvc.model.shape.Size;
 import cs5004.mvc.model.shape.TypeOfShape;
 import cs5004.mvc.model.transformations.ITransformations;
 import cs5004.mvc.model.transformations.TypeOfTransformation;
+import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -319,4 +320,10 @@ public class SVGView extends AbstractView implements IView {
   public TypeOfView getViewType() {
     return TypeOfView.SVG;
   }
+
+  @Override
+  public void render(int speed) {}
+
+  @Override
+  public void setListeners(ActionListener click) {}
 }
