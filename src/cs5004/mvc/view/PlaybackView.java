@@ -197,7 +197,6 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   }
 
   public void atTick(int tick) {
-    drawPanel.removeAll();
     drawPanel.setTick(tick);
     drawPanel.paintComponent(getGraphics());
     drawPanel.revalidate();

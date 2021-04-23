@@ -68,7 +68,6 @@ public class GraphicalView extends AbstractView implements IView {
    * @param tick int tick.
    */
   public void atTick(int tick) {
-    drawPanel.removeAll();
     drawPanel.setTick(tick);
     drawPanel.revalidate();
     this.repaint();

@@ -49,15 +49,6 @@ public class DrawPanel extends JPanel {
     this.tick = tick;
   }
 
-  /**
-   * Method to get the current tick.
-   *
-   * @return int tick.
-   */
-  public int getTick() {
-    return this.tick;
-  }
-
   @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
