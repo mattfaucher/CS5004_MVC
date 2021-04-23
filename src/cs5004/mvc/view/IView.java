@@ -31,7 +31,13 @@ public interface IView {
    */
   TypeOfView getViewType();
 
-  void render(int speed);
+  /** Method to render out the shapes onto the screen. */
+  void render();
 
+  /**
+   * Method to set the button listeneres for the UI.
+   *
+   * @param click ActionEvent.
+   */
   void setListeners(ActionListener click);
 }

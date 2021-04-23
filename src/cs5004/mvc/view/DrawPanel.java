@@ -3,6 +3,7 @@ package cs5004.mvc.view;
 import cs5004.mvc.model.IModel;
 import cs5004.mvc.model.shape.IShape;
 import cs5004.mvc.model.shape.TypeOfShape;
+import cs5004.mvc.model.transformations.ITransformations;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -47,6 +48,12 @@ public class DrawPanel extends JPanel {
       throw new IllegalArgumentException("Tick must equal 1 or greater");
     }
     this.tick = tick;
+  }
+
+  public boolean animationDone() {
+    List<IShape> shapes = model.getStateAtTick(this.tick);
+    // get the last shape
+    return shapes.size() == 0;
   }
 
   @Override

@@ -131,12 +131,12 @@ public class TextView extends AbstractView implements IView {
   }
 
   @Override
-  public void render(int speed) {
-
+  public void render() {
+    // no necessary implementation
   }
 
   @Override
   public void setListeners(ActionListener click) {
-
+    // no necessary implementation
   }
 }

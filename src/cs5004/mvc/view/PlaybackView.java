@@ -3,6 +3,7 @@ package cs5004.mvc.view;
 import cs5004.mvc.model.IModel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +20,9 @@ import javax.swing.Timer;
 public class PlaybackView extends AbstractView implements IView, ActionListener {
   private JPanel mainPanel;
   private JPanel controlPanel;
-  private JPanel dataPanel;
   private DrawPanel drawPanel;
   private JButton play;
-  private JButton restart;
+  private JButton rewind;
   private JCheckBox setLoop;
   private JTextField setSpeed;
   private JButton changeSpeed;
@@ -43,7 +43,7 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   public PlaybackView(int tempo, IModel model) throws IllegalArgumentException {
     super(tempo, model);
     setTitle("Easy Animator Playback");
-    setPreferredSize(new Dimension(1600, 800));
+    setPreferredSize(new Dimension(800, 900));
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.paused = false;
     this.loop = false;
@@ -52,7 +52,6 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
 
     // set up main panel to house all other panels
     mainPanel = new JPanel();
-    mainPanel.setSize(1920, 300);
     mainPanel.setBackground(Color.white);
     mainPanel.setBorder(BorderFactory.createTitledBorder("Main Panel"));
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
@@ -61,12 +60,6 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     drawPanel = new DrawPanel(model);
     drawPanel.setBorder(BorderFactory.createTitledBorder("Animation Visualization"));
 
-    // set up data panel
-    dataPanel = new JPanel();
-    dataPanel.setBorder(BorderFactory.createTitledBorder("Data Output"));
-    dataPanel.setBackground(Color.PINK);
-    dataPanel.setLayout(new GridLayout());
-
     // set up the controlPanel
     controlPanel = new JPanel();
     controlPanel.setBorder(BorderFactory.createTitledBorder("Control Panel"));
@@ -74,20 +67,21 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     controlPanel.setSize(700, 130);
     controlPanel.setBackground(Color.gray);
     controlPanel.setLayout(new GridLayout());
-    //controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 
     // set up buttons
     play = new JButton();
     play.setText("Play/Pause");
     play.setActionCommand("play/pause");
-    restart = new JButton();
-    restart.setText("Restart");
-    restart.setActionCommand("restart");
+    rewind = new JButton();
+    rewind.setText("Rewind");
+    rewind.setActionCommand("rewind");
     setLoop = new JCheckBox();
     setLoop.setText("Loop");
     setLoop.setSelected(false);
     setLoop.setActionCommand("loop");
     setSpeed = new JTextField(this.speed);
+    Font field = new Font("SansSerif", Font.BOLD, 30);
+    setSpeed.setFont(field);
     setSpeed.setBorder(BorderFactory.createTitledBorder("Speed Input"));
     changeSpeed = new JButton("Set Speed");
     changeSpeed.setActionCommand("speed");
@@ -96,14 +90,13 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
     this.setListeners(this);
 
     controlPanel.add(play);
-    controlPanel.add(restart);
+    controlPanel.add(rewind);
     controlPanel.add(setLoop);
     controlPanel.add(changeSpeed);
     controlPanel.add(setSpeed);
 
     // add all to mainpanel
     mainPanel.add(drawPanel);
-    mainPanel.add(dataPanel);
     this.add(controlPanel);
     this.add(mainPanel);
     pack();
@@ -126,15 +119,17 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   }
 
   /**
-   * Method for the restart button which will cause the animation to restart.
+   * Method for the rewind button which will cause the animation to restart.
    *
    * @param e ActionEvent.
    */
-  private void restartButton(ActionEvent e) {
+  private void rewindButton(ActionEvent e) {
     timer.stop();
-    super.repaint();
+    drawPanel.removeAll();
     this.tick = 0;
-    render(this.speed);
+    atTick(this.tick);
+    render();
+    timer.start();
   }
 
   /**
@@ -144,9 +139,9 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
    */
   private void loopButton(ActionEvent e) {
     if (loop) {
-      if (!timer.isRunning()) {
+      if (drawPanel.animationDone()) {
         this.tick = 0;
-        atTick(0);
+        atTick(this.tick);
         timer.restart();
       }
     }
@@ -159,26 +154,32 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
    */
   private void speedToggle(ActionEvent e) {
     String text = setSpeed.getText();
-    int val = Integer.parseInt(text);
-    if (val > 0) {
-      this.speed = Integer.parseInt(text);
-      this.delay = 1000 / this.speed;
-      System.out.println(this.speed);
-      render(this.speed);
+    if (text.equals("")) {
+      throw new IllegalArgumentException("Not an integer");
+    } else {
+      int val = Integer.parseInt(text);
+      if (val > 0) {
+        this.speed = Integer.parseInt(text);
+        this.delay = 1000 / this.speed;
+        render();
+      }
     }
   }
 
   @Override
-  public void render(int speed) {
+  public void render() {
     ActionListener al =
         e -> {
           if (timer.isRunning()) {
-            atTick(tick);
-            tick++;
+            atTick(this.tick);
+            this.tick++;
             setPreferredSize(new Dimension(1920, 1000));
-            pack();
             update(getGraphics());
-            repaint();
+          } else {
+            this.tick = 0;
+            atTick(this.tick);
+            setPreferredSize(new Dimension(1920, 1000));
+            update(getGraphics());
           }
         };
     this.timer = new Timer(this.delay, al);
@@ -187,21 +188,23 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    switch (e.getActionCommand()) {
-      case "play/pause":
-        playButton(e);
-        break;
-      case "restart":
-        restartButton(e);
-        break;
-      case "loop":
-        loop = !loop;
-        loopButton(e);
-        break;
-      case "speed":
-        speedToggle(e);
-      default:
-        break;
+    if (e.getActionCommand() != null) {
+      switch (e.getActionCommand()) {
+        case "play/pause":
+          playButton(e);
+          break;
+        case "rewind":
+          rewindButton(e);
+          break;
+        case "loop":
+          loop = !loop;
+          loopButton(e);
+          break;
+        case "speed":
+          speedToggle(e);
+        default:
+          break;
+      }
     }
   }
 
@@ -214,7 +217,7 @@ public class PlaybackView extends AbstractView implements IView, ActionListener 
   @Override
   public void setListeners(ActionListener click) {
     this.play.addActionListener(click);
-    this.restart.addActionListener(click);
+    this.rewind.addActionListener(click);
     this.setLoop.addActionListener(click);
     this.changeSpeed.addActionListener(click);
   }

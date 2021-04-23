@@ -2,22 +2,16 @@ package cs5004.mvc.controller;
 
 import cs5004.mvc.model.IModel;
 import cs5004.mvc.view.IView;
-import cs5004.mvc.view.PlaybackView;
 import cs5004.mvc.view.TypeOfView;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import javax.swing.Timer;
 
 /**
  * Class to store the controller and to use this controller to handle the communication between
  * model and the view.
  */
-public class Controller implements ActionListener {
+public class Controller {
   private IModel model;
   private IView view;
-  private Timer timer;
 
   public Controller(IModel model, IView view) {
     if (model == null || view == null) {
@@ -26,7 +20,6 @@ public class Controller implements ActionListener {
 
     this.model = model;
     this.view = view;
-    view.setListeners(this);
   }
 
   /**
@@ -48,11 +41,10 @@ public class Controller implements ActionListener {
         view.saveFile(view.getModelString(model), outfile);
         break;
       case GRAPHICAL:
-        view.render(speed);
+        view.render();
         break;
       case PLAYBACK:
-        // render((PlaybackView) view, speed);
-        view.render(speed);
+        view.render();
         break;
       default:
         System.out.println("Error determining the type of view.");
@@ -60,7 +52,4 @@ public class Controller implements ActionListener {
         break;
     }
   }
-
-  @Override
-  public void actionPerformed(ActionEvent e) {}
 }

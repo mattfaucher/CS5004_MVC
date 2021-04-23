@@ -84,8 +84,10 @@ public class EasyAnimator {
     IView view;
     Controller controller;
     AnimationBuilder<IModel> builder = new AnimationBuilderImpl(model);
+
     // read file from CLI
     Readable inFile = new FileReader(infile);
+    // Read data from file
     AnimationReader.parseFile(inFile, builder);
     // call view factory
     view = ViewFactory.makeView(type, speed, model);

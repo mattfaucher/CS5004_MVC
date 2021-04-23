@@ -94,8 +94,8 @@ public class GraphicalView extends AbstractView implements IView {
   }
 
   @Override
-  public void render(int speed) {
-    int delay = 1000 / speed;
+  public void render() {
+    int delay = 1000 / getTempo();
     ActionListener al =
         new ActionListener() {
           private int tick = 0;
